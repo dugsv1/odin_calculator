@@ -7,8 +7,111 @@
 </head>
 <body>
     
-
+    <div class="outer-outline">
+        <div class="display-grid">
+            <div class="display">
+                <p id="display-text">Sample</p>
+            </div>
+            <button type="reset">Clear</button>
+        </div>
+            <div class="outline">
+                <div class="keypad">
+                    <div class="numbers numbers0">
+                        <div class="number">0</div>
+                    </div>
+                    <div class="numbers numbers4-6">
+                        <div class="number">1</div>
+                        <div class="number">2</div>
+                        <div class="number">3</div>
+                    </div>
+                    <div class="numbers numbers7-9">
+                        <div class="number">4</div>
+                        <div class="number">5</div>
+                        <div class="number">6</div>
+                    </div>
+                    <div class="numbers numbers1-3">
+                        <div class="number">7</div>
+                        <div class="number">8</div>
+                        <div class="number">9</div>
+                    </div>
+                </div>
+                <div class="operators">
+                    <div class="right-bar operator add">+</div>
+                    <div class="right-bar operator subtract">-</div>
+                    <div class="right-bar operator divide">/</div>
+                    <div class="right-bar operator multiply">*</div>
+                    <div class="right-bar period">.</div>
+                    <div class="right-bar equals">=</div>
+                </div>
+            </div>
+    </div>
     <style>
+    .outer-outline {
+        border: 1px solid green;
+        max-width: 500px;
+        box-sizing: border-box;
+    }   
+    .display-grid {
+        border: 1px solid purple;
+        display: flex;
+        justify-content: space-between;
+    }
+    .display {
+        box-sizing: border-box;
+        margin: 0px 25px 0px;
+        flex: 3;
+        margin: 10px ;
+    }
+    button {
+        margin: 10px 25px 10px;
+        width: 75px;
+        box-sizing: border-box;
+    }
+    .outline {
+        display: flex;
+        border: 1px solid red;
+        max-width: 500px;
+    }
+    .operators {
+        border: 1px solid green;
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+    }
+    .right-bar {
+        border: 1px solid pink;
+        height: 100%;
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    .keypad {
+        display: flex;
+        min-width: 50px;
+        min-height: 400px;
+        flex-direction: column-reverse;
+        border: 4px solid blue;
+        flex: 3;
+    }
+    .keypad div {
+        width: 100%;
+        display: flex;
+        flex: 1 1 0;
+        justify-content: center;
+        align-items: center;
+        
+    }
+    .number {
+        height: 100%;
+        border: 1px solid black;
+    }
+
+    .keypad, .keypad div {
+        box-sizing: border-box;
+    }
+
+    
 
     </style>
     <script>
@@ -45,7 +148,53 @@
                 
             }
         }
-        console.log(operate('*', 1, 2))
+       
+        const display = document.querySelector('#display-text')
+        let clickString = ''
+        const numbers = Array.from(document.querySelectorAll('.number'))
+        numbers.forEach((number) => {
+            number.addEventListener('click', (e) => {
+                // display.textContent = e.target.textContent
+                clickString += e.target.textContent
+                display.textContent = clickString
+            })
+        })
+        const operators = Array.from(document.querySelectorAll('.operator'))
+        operators.forEach(operator => {
+            operator.addEventListener('click', (e) => {
+                clickString += e.target.textContent
+                display.textContent = clickString
+            })
+        })
+        const equals = document.querySelector('.equals')
+        equals.addEventListener('click', (e) => {
+            matches = clickString.match(regex)
+            if (matches) {
+                console.log(`Group 1 (First Number): ${matches[1]}`);  // 45.5
+                console.log(`Group 2 (Operator): ${matches[3]}`);      // +
+                console.log(`Group 3 (Second Number): ${matches[4]}`); // 32.8
+            } else {
+                console.log("No match found.");
+            }
+            arg1 = matches[1];
+            operator = matches[3];
+            arg2 = matches[4];
+            result = operate(operator, arg1, arg2)
+            display.textContent = result
+            clickString = ''
+    })
+        const regex = new RegExp(/(\d+(\.\d+)?)([+\-*/])(\d+(\.\d+)?)/)
+        const reset = document.querySelector('button')
+        reset.addEventListener('click', (e)=>{
+            display.textContent = 'Begin Entering'
+            clickString = ''
+        })
+        /** 
+         * CALLBACK for on click, update display
+         * Assign sequence of clicks to variable, display that sequence as string
+         * execute calculate fuction on equals click
+        */
     </script>
 </body>
 </html>
+
